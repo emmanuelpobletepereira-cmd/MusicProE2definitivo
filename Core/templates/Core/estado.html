@@ -1,0 +1,1 @@
+{% if producto.cantidad == 0 %}<span class="badge empty-stock">Sin existencias</span>{% elif producto.cantidad <= producto.stock_minimo %}<span class="badge low-stock">Stock bajo</span>{% else %}<span class="badge available">Disponible</span>{% endif %}
