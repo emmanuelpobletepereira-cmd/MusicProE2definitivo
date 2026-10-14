@@ -1,10 +1,11 @@
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlsplit
 
 from django.core.paginator import Paginator
 from django.db.models import Count, F, Q, Sum
 from django.db.models.functions import Lower
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
+from django.urls import reverse
 
 from .models import Categoria, Producto
 
@@ -49,10 +50,18 @@ def inventario(request):
         'pagina': pagina, 'resumen': resumen, 'categorias': Categoria.objects.order_by('nombre'),
         'q': q, 'categoria_activa': categoria, 'estado': estado, 'orden': orden,
         'filtros_activos': bool(q or categoria or estado), 'parametros': urlencode(params),
+        'retorno': urlencode({'volver': reverse('inventario') + '?' + urlencode({**params, 'pagina': pagina.number})}),
     })
 
 
 @require_safe
 def producto_detalle(request, pk):
     producto = get_object_or_404(Producto.objects.select_related('categoria', 'marca'), pk=pk)
-    return render(request, 'Core/producto_detalle.html', {'producto': producto})
+    volver = request.GET.get('volver', reverse('inventario'))
+    try:
+        destino = urlsplit(volver)
+        if destino.scheme or destino.netloc or destino.path != reverse('inventario'):
+            volver = reverse('inventario')
+    except ValueError:
+        volver = reverse('inventario')
+    return render(request, 'Core/producto_detalle.html', {'producto': producto, 'volver': volver})

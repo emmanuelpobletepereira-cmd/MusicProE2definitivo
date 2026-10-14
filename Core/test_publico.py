@@ -78,3 +78,14 @@ class InventarioPublicoTests(TestCase):
     def test_ordenar_por_menor_stock(self):
         r = self.client.get('/', {'orden': 'menor_stock'})
         self.assertEqual(list(r.context['pagina']), [self.agotado, self.bajo, self.disponible])
+
+    def test_volver_conserva_la_consulta_y_rechaza_destinos_externos(self):
+        url = reverse('producto_detalle', args=[self.bajo.pk])
+        r = self.client.get('/', {'q': 'Guitarra'})
+        self.assertIn('volver=', r.context['retorno'])
+        r = self.client.get(url, {'volver': '/?q=Guitarra&pagina=2'})
+        self.assertEqual(r.context['volver'], '/?q=Guitarra&pagina=2')
+        for externo in ['https://example.com/', '//example.com/', '/admin/', 'http://[invalido']:
+            with self.subTest(destino=externo):
+                r = self.client.get(url, {'volver': externo})
+                self.assertEqual(r.context['volver'], '/')
