@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django.core.paginator import Paginator
 from django.db.models import Count, F, Q, Sum
 from django.shortcuts import get_object_or_404, render
@@ -38,12 +40,14 @@ def inventario(request):
         disponibles=Count('id', filter=Q(cantidad__gt=0)),
         reponer=Count('id', filter=Q(cantidad__lte=F('stock_minimo'))),
     )
-    params = request.GET.copy()
-    params.pop('pagina', None)
+    # Conserva solo los filtros que realmente se aplicaron.
+    params = {key: value for key, value in {
+        'q': q, 'categoria': categoria, 'estado': estado, 'orden': orden,
+    }.items() if value and (key != 'orden' or value != 'recientes')}
     return render(request, 'Core/inventario.html', {
         'pagina': pagina, 'resumen': resumen, 'categorias': Categoria.objects.order_by('nombre'),
         'q': q, 'categoria_activa': categoria, 'estado': estado, 'orden': orden,
-        'filtros_activos': bool(q or categoria or estado), 'parametros': params.urlencode(),
+        'filtros_activos': bool(q or categoria or estado), 'parametros': urlencode(params),
     })
 
 

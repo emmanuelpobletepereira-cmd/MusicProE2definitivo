@@ -58,3 +58,7 @@ class InventarioPublicoTests(TestCase):
         self.assertContains(r, '&lt;script&gt;alert(1)&lt;/script&gt;')
         Producto.objects.all().delete()
         self.assertContains(self.client.get('/'), 'Tu inventario empieza aquí')
+
+    def test_enlaces_conservan_solo_filtros_validos(self):
+        r = self.client.get('/', {'q': '  Amplificador  ', 'estado': 'incorrecto', 'extra': 'descartar'})
+        self.assertEqual(r.context['parametros'], 'q=Amplificador')
