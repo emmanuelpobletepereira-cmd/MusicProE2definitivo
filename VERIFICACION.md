@@ -47,3 +47,20 @@ Se añadió la portada en `/` y la ficha `/productos/<id>/`, conectadas a los mo
 Se ejecutaron `check`, `makemigrations --check --dry-run` y `test Core --noinput` con el entorno `.venv` de esta copia y Django 6.1.1: sin problemas de configuración, sin migraciones nuevas y **46 pruebas aprobadas**. Las seis pruebas nuevas comprueban resumen, búsqueda/filtros, parámetros inválidos, paginación, ficha pública, rechazo de escrituras, escape de texto y estado vacío. Se actualizó la prueba antigua que exigía tener únicamente rutas de Admin.
 
 La página incluye reglas adaptables a móvil; la inspección visual en navegador quedó pendiente porque no se autorizó a Codex a acceder al servidor local. No se modificaron modelos ni registros existentes.
+
+## Mejoras del inventario y nueva comprobación
+
+Se conservó el arranque directo con `manage.py runserver` y se retiró el lanzador por lotes según los cambios locales del estudiante. El README incluye instalación desde una copia nueva, conexión SQLite, migraciones, recorrido del CRUD, cargas de Faker y soluciones a errores habituales.
+
+La consulta pública permite buscar también por ubicación y ordenar por menor stock. El orden alfabético usa `Lower` para evitar separar mayúsculas y minúsculas según el comportamiento de SQLite. Los enlaces de paginación conservan solamente los filtros válidos, y las fichas permiten volver a la consulta y página anteriores. Los destinos externos o ajenos al inventario se descartan al construir el enlace de regreso.
+
+Los números de página negativos, no numéricos o excesivamente largos se normalizan a la primera página. Se añadieron descripciones para la tabla y los filtros, identificación de la página actual, controles táctiles más amplios y una explicación del umbral de reposición. Los finales de línea de los archivos de texto se definen en `.gitattributes`.
+
+Comprobación ejecutada con Django 6.1.1:
+
+- `manage.py check`: sin problemas.
+- `manage.py makemigrations --check --dry-run`: sin cambios pendientes.
+- `manage.py test Core --noinput`: **52 pruebas aprobadas**.
+- Revisión de Git: sin errores de espacios; no se incluyen bases SQLite, archivos `.env` ni el entorno virtual.
+
+Las seis pruebas de regresión nuevas cubren parámetros de búsqueda, búsqueda por ubicación, orden alfabético, menor stock, regreso desde la ficha y números de página inválidos. Las pruebas anteriores de CRUD, integridad y Faker continúan pasando. No se modificó la estructura de los modelos ni se cargaron datos nuevos en la base habitual durante esta revisión. La inspección visual sigue pendiente, como se indicó en la comprobación anterior.
