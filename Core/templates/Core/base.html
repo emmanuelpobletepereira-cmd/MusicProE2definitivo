@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{% static 'Core/bodega.css' %}"></head>
 <body><a class="skip" href="#contenido">Saltar al contenido</a>
 <aside class="sidebar"><a class="brand" href="{% url 'inventario' %}"><span class="brand-icon" aria-hidden="true">♫</span><span>MUSIC<span class="brand-light">PRO</span><small>CONTROL DE BODEGA</small></span></a>
-<div class="nav-label">ESPACIO DE TRABAJO</div><nav aria-label="Navegación principal"><a class="nav-active" href="{% url 'inventario' %}"><span aria-hidden="true">▦</span> Inventario <span class="nav-arrow" aria-hidden="true">↗</span></a><a href="{% url 'admin:index' %}"><span aria-hidden="true">⚙</span> Administración</a></nav>
+<div class="nav-label">ESPACIO DE TRABAJO</div><nav aria-label="Navegación principal"><a class="nav-active" href="{% url 'inventario' %}" {% if request.resolver_match.url_name == 'inventario' %}aria-current="page"{% endif %}><span aria-hidden="true">▦</span> Inventario <span class="nav-arrow" aria-hidden="true">↗</span></a><a href="{% url 'admin:index' %}"><span aria-hidden="true">⚙</span> Administración</a></nav>
 <div class="sidebar-bottom"><span class="status-dot"></span> Consulta de existencias<p>Instrumentos, audio y accesorios.<br>Todo en su lugar.</p><span class="sidebar-sign">MUSIC PRO / BODEGA</span></div></aside>
 <div class="shell"><header class="topbar"><span>Bodega <span class="slash">/</span> <strong>{% block breadcrumb %}Inventario{% endblock %}</strong></span><a class="access" href="{% url 'admin:index' %}">{% if user.is_staff %}Ir al administrador{% else %}Acceso del personal{% endif %} <span aria-hidden="true">↗</span></a></header>
 <main id="contenido">{% block content %}{% endblock %}</main>
