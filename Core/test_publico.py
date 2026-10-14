@@ -74,3 +74,7 @@ class InventarioPublicoTests(TestCase):
         self.disponible.save()
         r = self.client.get('/', {'orden': 'nombre'})
         self.assertEqual([p.nombre for p in r.context['pagina']], ['bajo', 'Microfono', 'Zumbador'])
+
+    def test_ordenar_por_menor_stock(self):
+        r = self.client.get('/', {'orden': 'menor_stock'})
+        self.assertEqual(list(r.context['pagina']), [self.agotado, self.bajo, self.disponible])

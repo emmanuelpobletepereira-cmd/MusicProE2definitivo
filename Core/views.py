@@ -21,7 +21,7 @@ def inventario(request):
     if estado not in ('disponible', 'bajo', 'agotado'):
         estado = ''
     orden = request.GET.get('orden', 'recientes')
-    ordenes = {'recientes': '-id', 'nombre': Lower('nombre'), 'stock': '-cantidad'}
+    ordenes = {'recientes': '-id', 'nombre': Lower('nombre'), 'stock': '-cantidad', 'menor_stock': 'cantidad'}
     if orden not in ordenes:
         orden = 'recientes'
     productos = Producto.objects.select_related('categoria', 'marca')
