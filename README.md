@@ -64,3 +64,33 @@ Si el producto tiene detalles o movimientos asociados, Django protege su elimina
 El administrador incluye filtros, búsquedas y formularios personalizados. **El stock se edita manualmente**: crear, editar o eliminar un movimiento no recalcula automáticamente las existencias del producto. Compras y ventas muestran subtotales y totales calculados.
 
 La página pública permite consultar el inventario sin iniciar sesión. La modificación de registros requiere acceso al administrador y permisos sobre los modelos.
+
+## Datos ficticios y cargas
+
+Para generar una muestra con Faker:
+
+```bat
+.venv\Scripts\python.exe manage.py cargar_datos --cantidad 100 --semilla 42
+```
+
+Para poblar también compras, ventas, detalles y movimientos, utiliza una muestra pequeña:
+
+```bat
+.venv\Scripts\python.exe manage.py cargar_datos --cantidad 20 --lote 7 --semilla 42 --completo
+```
+
+`--cantidad` cuenta productos nuevos; las categorías y los registros relacionados no están incluidos en esa cifra. Cada ejecución añade registros. Repetir la semilla no evita una carga adicional: los códigos son únicos por ejecución.
+
+La pauta pide demostrar 100, 1.000, 100.000 y 1.000.000 datos con el docente. Cambia `--cantidad` a cada valor y verifica los conteos antes y después con `verificar_bd`. Puedes usar `--lote 1000` para limitar los objetos preparados en memoria.
+
+Para ensayar en otra base desde CMD, elige un nombre nuevo:
+
+```bat
+set MUSICPRO_DB_PATH=ensayo-100.sqlite3
+.venv\Scripts\python.exe manage.py migrate
+.venv\Scripts\python.exe manage.py cargar_datos --cantidad 100 --semilla 42
+.venv\Scripts\python.exe manage.py verificar_bd
+set MUSICPRO_DB_PATH=
+```
+
+Repite con un archivo distinto para cada volumen. Quitar la variable vuelve a seleccionar `db.sqlite3`; no elimina la base de ensayo. Los tiempos medidos están en `VERIFICACION.md`.
