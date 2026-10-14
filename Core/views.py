@@ -36,7 +36,15 @@ def inventario(request):
         productos = productos.filter(cantidad__gt=0, cantidad__lte=F('stock_minimo'))
     elif estado == 'agotado':
         productos = productos.filter(cantidad=0)
-    pagina = Paginator(productos.order_by(ordenes[orden], 'pk'), 24).get_page(request.GET.get('pagina'))
+    numero_pagina = request.GET.get('pagina', '1')
+    # Evita convertir cadenas numericas excesivas y normaliza valores invalidos.
+    try:
+        numero_pagina = int(numero_pagina) if len(numero_pagina) <= 20 else 1
+        if numero_pagina < 1:
+            numero_pagina = 1
+    except ValueError:
+        numero_pagina = 1
+    pagina = Paginator(productos.order_by(ordenes[orden], 'pk'), 24).get_page(numero_pagina)
     resumen = Producto.objects.aggregate(
         referencias=Count('id'), unidades=Sum('cantidad', default=0),
         disponibles=Count('id', filter=Q(cantidad__gt=0)),

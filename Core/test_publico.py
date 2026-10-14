@@ -89,3 +89,11 @@ class InventarioPublicoTests(TestCase):
             with self.subTest(destino=externo):
                 r = self.client.get(url, {'volver': externo})
                 self.assertEqual(r.context['volver'], '/')
+
+    def test_pagina_invalida_regresa_al_inicio(self):
+        Producto.objects.bulk_create([Producto(codigo=f'PAG-{i}', nombre='Producto', categoria=self.audio, ubicacion='A') for i in range(25)])
+        for numero in ['-1', '0', 'abc', '9' * 5000]:
+            with self.subTest(pagina=numero):
+                r = self.client.get('/', {'pagina': numero})
+                self.assertEqual(r.status_code, 200)
+                self.assertEqual(r.context['pagina'].number, 1)
