@@ -25,3 +25,24 @@ Para iniciar nuevamente, basta con:
 ```
 
 El entorno y la base local no se suben a GitHub. Cada equipo debe instalar las dependencias y aplicar las migraciones.
+
+## Base de datos y migraciones
+
+La conexión está en `musicpro_backend/settings.py`. El motor es SQLite y el archivo habitual es `db.sqlite3`, junto a `manage.py`.
+
+```bat
+.venv\Scripts\python.exe manage.py verificar_bd
+.venv\Scripts\python.exe manage.py showmigrations bodega
+.venv\Scripts\python.exe manage.py makemigrations --check --dry-run
+```
+
+`verificar_bd` identifica la conexión, las tablas y los registros. Las migraciones de la aplicación están en `Core/migrations/`; su etiqueta de Django es `bodega`.
+
+Cuando cambies un modelo en `Core/models.py`, genera y aplica una nueva migración:
+
+```bat
+.venv\Scripts\python.exe manage.py makemigrations bodega
+.venv\Scripts\python.exe manage.py migrate
+```
+
+Conserva todo el historial. El diagrama se entrega aparte y debe actualizarse si cambian los modelos.
