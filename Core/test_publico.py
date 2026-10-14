@@ -66,3 +66,11 @@ class InventarioPublicoTests(TestCase):
     def test_buscar_producto_por_ubicacion(self):
         r = self.client.get('/', {'q': 'B2'})
         self.assertEqual(list(r.context['pagina']), [self.bajo])
+
+    def test_orden_alfabetico_ignora_mayusculas(self):
+        self.bajo.nombre = 'bajo'
+        self.bajo.save()
+        self.disponible.nombre = 'Zumbador'
+        self.disponible.save()
+        r = self.client.get('/', {'orden': 'nombre'})
+        self.assertEqual([p.nombre for p in r.context['pagina']], ['bajo', 'Microfono', 'Zumbador'])

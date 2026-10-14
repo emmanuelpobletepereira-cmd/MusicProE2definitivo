@@ -2,6 +2,7 @@ from urllib.parse import urlencode
 
 from django.core.paginator import Paginator
 from django.db.models import Count, F, Q, Sum
+from django.db.models.functions import Lower
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_safe
 
@@ -20,7 +21,7 @@ def inventario(request):
     if estado not in ('disponible', 'bajo', 'agotado'):
         estado = ''
     orden = request.GET.get('orden', 'recientes')
-    ordenes = {'recientes': '-id', 'nombre': 'nombre', 'stock': '-cantidad'}
+    ordenes = {'recientes': '-id', 'nombre': Lower('nombre'), 'stock': '-cantidad'}
     if orden not in ordenes:
         orden = 'recientes'
     productos = Producto.objects.select_related('categoria', 'marca')
