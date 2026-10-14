@@ -2,3 +2,18 @@
 
 .search-help { margin: -8px 26px 20px; color: #52665b; font-size: 11px; }
 @media (max-width: 760px) { .search-help { margin-inline: 16px; } }
+
+/* Controles faciles de utilizar desde una pantalla tactil. */
+@media (pointer: coarse) {
+    input, select, .button, .access, .pagination a, .detail-link, .back-link {
+        min-height: 44px;
+    }
+    .detail-link, .back-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 8px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+}
