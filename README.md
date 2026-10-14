@@ -46,3 +46,21 @@ Cuando cambies un modelo en `Core/models.py`, genera y aplica una nueva migraci�
 ```
 
 Conserva todo el historial. El diagrama se entrega aparte y debe actualizarse si cambian los modelos.
+
+## Administrar la bodega
+
+En `/admin/`, inicia sesión con tu superusuario. Los modelos registrados son categorías, marcas, proveedores, clientes, productos, compras, detalles de compras, ventas, detalles de ventas y movimientos.
+
+Para demostrar el CRUD de un producto:
+
+1. Crea una categoría de prueba.
+2. Añade un producto con código único, nombre, categoría, ubicación y existencias.
+3. Búscalo por código y comprueba que está guardado.
+4. Modifica su ubicación o cantidad y vuelve a consultarlo.
+5. Elimínalo y verifica que desapareció. Elimina después la categoría de prueba.
+
+Si el producto tiene detalles o movimientos asociados, Django protege su eliminación. Primero debes retirar esos registros dependientes.
+
+El administrador incluye filtros, búsquedas y formularios personalizados. **El stock se edita manualmente**: crear, editar o eliminar un movimiento no recalcula automáticamente las existencias del producto. Compras y ventas muestran subtotales y totales calculados.
+
+La página pública permite consultar el inventario sin iniciar sesión. La modificación de registros requiere acceso al administrador y permisos sobre los modelos.
