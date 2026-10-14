@@ -62,3 +62,7 @@ class InventarioPublicoTests(TestCase):
     def test_enlaces_conservan_solo_filtros_validos(self):
         r = self.client.get('/', {'q': '  Amplificador  ', 'estado': 'incorrecto', 'extra': 'descartar'})
         self.assertEqual(r.context['parametros'], 'q=Amplificador')
+
+    def test_buscar_producto_por_ubicacion(self):
+        r = self.client.get('/', {'q': 'B2'})
+        self.assertEqual(list(r.context['pagina']), [self.bajo])

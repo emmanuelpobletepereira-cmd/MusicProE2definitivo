@@ -25,7 +25,7 @@ def inventario(request):
         orden = 'recientes'
     productos = Producto.objects.select_related('categoria', 'marca')
     if q:
-        productos = productos.filter(Q(nombre__icontains=q) | Q(codigo__icontains=q) | Q(marca__nombre__icontains=q))
+        productos = productos.filter(Q(nombre__icontains=q) | Q(codigo__icontains=q) | Q(marca__nombre__icontains=q) | Q(ubicacion__icontains=q))
     if categoria:
         productos = productos.filter(categoria_id=int(categoria))
     if estado == 'disponible':
