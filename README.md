@@ -94,3 +94,23 @@ set MUSICPRO_DB_PATH=
 ```
 
 Repite con un archivo distinto para cada volumen. Quitar la variable vuelve a seleccionar `db.sqlite3`; no elimina la base de ensayo. Los tiempos medidos están en `VERIFICACION.md`.
+
+## Comprobar el proyecto y resolver errores
+
+```bat
+.venv\Scripts\python.exe manage.py check
+.venv\Scripts\python.exe manage.py test Core --noinput
+```
+
+Las pruebas utilizan una base temporal y no borran la base habitual.
+
+| Mensaje o situación | Qué revisar |
+| --- | --- |
+| `No module named django` | Instala `requirements.txt` con el Python de `.venv`. |
+| `no such table` | Ejecuta `manage.py migrate` en la base seleccionada. |
+| El puerto 8000 está ocupado | Detén el servidor anterior o ejecuta `manage.py runserver 8001`. |
+| El inventario aparece vacío | Crea productos en Admin o ejecuta una carga pequeña con Faker. |
+| No puedes entrar en Admin | Crea el superusuario en la misma base con la que iniciaste el servidor. |
+| El navegador muestra una versión anterior | Recarga con Ctrl+F5 y comprueba la carpeta desde la que ejecutaste el servidor. |
+
+Cuando uses otro puerto, inclúyelo en la dirección del navegador, por ejemplo http://127.0.0.1:8001/.
